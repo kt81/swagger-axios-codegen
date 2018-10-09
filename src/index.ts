@@ -43,9 +43,20 @@ export async function codegen(params: ISwaggerOptions) {
   }
 
   let apiSource = `
-  import axios, { AxiosPromise, AxiosRequestConfig } from 'axios'
-  export interface IRequestOptions{
-    headers?:any
+  import axiosStatic, { AxiosPromise, AxiosRequestConfig, AxiosInstance } from 'axios';
+  export interface IRequestOptions {
+    headers?: any;
+  }
+  // Add options interface
+  export interface ServiceOptions {
+    axios?: AxiosInstance,
+  }
+  // Add default options
+  export const serviceOptions: ServiceOptions = {
+  };
+  // Instance selector
+  function axios(configs: AxiosRequestConfig): AxiosPromise {
+    return serviceOptions.axios ? serviceOptions.axios.request(configs) : axiosStatic(configs);
   }
 `
 
